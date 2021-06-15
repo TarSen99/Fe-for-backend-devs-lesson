@@ -1,0 +1,47 @@
+h1 {
+  text-align: center;
+}
+
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.mr {
+  margin-right: 5px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.character {
+  display: flex;
+}
+
+.character .image img {
+  width: 200px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.hero-name {
+  color: green;
+}
