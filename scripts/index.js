@@ -1,48 +1,67 @@
-// const nameBtn = document.querySelector("#button_name_1");
-// const nameColorBtn = document.querySelector("#button_name_color_1");
-// const removeNameBtn = document.querySelector("#button_remove_1");
-// const nameText = document.querySelector("h2");
+$(function () {
+    let page = 1
+    let pageLimit = 10
+    let totalRecord = 0
 
-const charactersContainer = document.getElementById('characters')
+    getData()
 
-const createCharacter = ({img, name, height, id}) => {
-    return `<li class="character" id="character_${id}">
-    <div class="image">
-      <img
-        src="${img}"
-        alt=""
-      />
-    </div>
+    $(".prev").on("click", function (){
+        if (page > 1) {
+            page--
+            getData()
+        }
+    })
 
-    <div class="info">
-      <h2>${name}</h2>
+    $(".next").on("click", function (){
+        if (page * pageLimit < totalRecord) {
+            page++
+            getData()
+        }
+    })
 
-      <p>Height: ${height}</p>
-    </div>
-  </li>`
-}
+    function getData() {
+        $.ajax({
+            url: "https://swapi.dev/api/people",
+            type: "GET",
+            data: {
+                page: page,
+                pageLimit: pageLimit
+            },
+            success: function (data) {
+                totalRecord = data.count
+                const results = data.results
+                let html = "";
 
-let xhr = new XMLHttpRequest();
+                for(let i = 0; i < results.length; i++) {
+                    const idArr = results[i].url.split('/')
+                    const id = idArr[idArr.length - 2]
 
-xhr.open("GET", "https://swapi.dev/api/people");
+                    html += createCharacter({
+                        id: id,
+                        name: results[i].name,
+                        height: results[i].height,
+                        img:  `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`,
+                    })
+                    $("#characters").html(html)
+                }
+            }
+        })
+    }
 
-xhr.send();
+    const createCharacter = ({img, name, height, id}) => {
+        return `<li class="character" id="character_${id}">
+                    <div class="image">
+                       <img
+                           src="${img}"
+                           alt=""
+                       />
+                    </div>
 
-xhr.onload = function () {
-  const parsed = JSON.parse(xhr.response) 
-  const results = parsed.results
+                    <div class="info">
+                       <h2>${name}</h2>
+                       <p>Height: ${height}</p>
+                    </div>
+                </li>`
+    }
+});
 
-  for(let i = 0; i < results.length; i++) {
-    const idArr = results[i].url.split('/')
-    const id = idArr[idArr.length - 2]
-
-    charactersContainer.insertAdjacentHTML('beforeend', createCharacter({
-        id: id,
-        name: results[i].name,
-        height: results[i].height,
-        img:  `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`,
-    }))
-  }
-
-  console.log(results);
-};
