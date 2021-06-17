@@ -3,10 +3,44 @@
 // const removeNameBtn = document.querySelector("#button_remove_1");
 // const nameText = document.querySelector("h2");
 
+var buttonGo = document
+  .querySelector('.buttonGo');
+
+var i = 1;
+
+function prev() {
+  if (i == 1) {
+
+    document.getElementsByClassName(
+      'prev').disabled = true;
+    document.getElementsByClassName(
+      'next').disabled = false;
+  } else {
+    i--;
+    return setNo();
+  }
+}
+
+function next() {
+  if (i == 5) {
+    document.getElementsByClassName(
+      'next').disabled = true;
+    document.getElementsByClassName(
+      'prev').disabled = false;
+  } else {
+    i++;
+    return setNo();
+  }
+}
+
+function setNo() {
+  return buttonGo.innerHTML = i;
+}
+
 const charactersContainer = document.getElementById('characters')
 
-const createCharacter = ({img, name, height, id}) => {
-    return `<li class="character" id="character_${id}">
+const createCharacter = ({ img, name, height, id }) => {
+  return `<li class="character" id="character_${id}">
     <div class="image">
       <img
         src="${img}"
@@ -29,18 +63,18 @@ xhr.open("GET", "https://swapi.dev/api/people");
 xhr.send();
 
 xhr.onload = function () {
-  const parsed = JSON.parse(xhr.response) 
+  const parsed = JSON.parse(xhr.response)
   const results = parsed.results
 
-  for(let i = 0; i < results.length; i++) {
+  for (let i = 0; i < results.length; i++) {
     const idArr = results[i].url.split('/')
     const id = idArr[idArr.length - 2]
 
     charactersContainer.insertAdjacentHTML('beforeend', createCharacter({
-        id: id,
-        name: results[i].name,
-        height: results[i].height,
-        img:  `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`,
+      id: id,
+      name: results[i].name,
+      height: results[i].height,
+      img: `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`,
     }))
   }
 
